@@ -1,0 +1,228 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.header {
+    margin-bottom: var(--spacing-md);
+}
+
+.title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: var(--spacing-xs) 0 0 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Theme Selector */
+.themeSelector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+.themeOption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.themeOption:hover {
+    border-color: var(--color-text-muted);
+}
+
+.themeOption.active {
+    border-color: var(--color-accent-primary);
+    background-color: rgba(99, 102, 241, 0.05);
+}
+
+.themePreview {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.themePreviewLight,
+.themePreviewDark {
+    display: flex;
+    height: 80px;
+}
+
+.themePreviewLight {
+    background-color: #f8fafc;
+}
+
+.themePreviewDark {
+    background-color: #0f172a;
+}
+
+.previewSidebar {
+    width: 30%;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.themePreviewDark .previewSidebar {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.previewContent {
+    flex: 1;
+    padding: var(--spacing-sm);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.previewCard {
+    width: 70%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+.themePreviewDark .previewCard {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.themeLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+/* Toggle List */
+.toggleList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.toggleItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-lg);
+}
+
+.toggleInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.toggleTitle {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.toggleDescription {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.toggle {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    background-color: var(--color-bg-hover);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.toggle.toggleOn {
+    background: var(--color-accent-gradient);
+}
+
+.toggleThumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.toggle.toggleOn .toggleThumb {
+    transform: translateX(22px);
+}
+
+/* Danger Zone */
+.dangerCard {
+    border-color: var(--color-danger);
+}
+
+.dangerZone {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.dangerItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+.dangerTitle {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.dangerDescription {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dangerItem {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
