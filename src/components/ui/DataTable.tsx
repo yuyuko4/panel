@@ -4,13 +4,14 @@ import React, { useState, useMemo } from 'react';
 import styles from './DataTable.module.css';
 import { Input } from './Input';
 import { Button } from './Button';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './Card';
 
 export interface Column<T> {
     key: keyof T | string;
     header: string;
     width?: string;
     sortable?: boolean;
-    render?: (value: T[keyof T], row: T, index: number) => React.ReactNode;
+    render?: (value: any, row: T, index: number) => React.ReactNode;
 }
 
 interface DataTableProps<T> {
@@ -23,9 +24,11 @@ interface DataTableProps<T> {
     emptyMessage?: string;
     actions?: (row: T, index: number) => React.ReactNode;
     className?: string;
+    title?: string;
+    description?: string;
 }
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T>({
     data,
     columns,
     searchable = true,
@@ -34,7 +37,9 @@ export function DataTable<T extends Record<string, unknown>>({
     onRowClick,
     emptyMessage = 'No data found',
     actions,
-    className = ''
+    className = '',
+    title,
+    description
 }: DataTableProps<T>) {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -46,7 +51,7 @@ export function DataTable<T extends Record<string, unknown>>({
         if (!searchQuery) return data;
 
         return data.filter(row =>
-            Object.values(row).some(value =>
+            Object.values(row as any).some(value =>
                 String(value).toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
@@ -57,8 +62,8 @@ export function DataTable<T extends Record<string, unknown>>({
         if (!sortColumn) return filteredData;
 
         return [...filteredData].sort((a, b) => {
-            const aValue = a[sortColumn as keyof T];
-            const bValue = b[sortColumn as keyof T];
+            const aValue = (a as any)[sortColumn];
+            const bValue = (b as any)[sortColumn];
 
             if (aValue === bValue) return 0;
 
@@ -88,11 +93,11 @@ export function DataTable<T extends Record<string, unknown>>({
         setCurrentPage(Math.max(1, Math.min(page, totalPages)));
     };
 
-    const getValue = (row: T, key: string): T[keyof T] => {
-        return row[key as keyof T];
+    const getValue = (row: T, key: string) => {
+        return (row as any)[key];
     };
 
-    return (
+    const tableContent = (
         <div className={`${styles.wrapper} ${className}`}>
             {searchable && (
                 <div className={styles.toolbar}>
@@ -220,4 +225,20 @@ export function DataTable<T extends Record<string, unknown>>({
             )}
         </div>
     );
+
+    if (title) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>{title}</CardTitle>
+                    {description && <CardDescription>{description}</CardDescription>}
+                </CardHeader>
+                <CardContent>
+                    {tableContent}
+                </CardContent>
+            </Card>
+        );
+    }
+
+    return tableContent;
 }

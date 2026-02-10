@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '@/providers/ThemeProvider';
+import { useAdmin } from '@/context/AdminContext';
 import styles from './Header.module.css';
 import { Input } from '../ui/Input';
 
@@ -12,6 +13,7 @@ interface HeaderProps {
 
 export function Header({ sidebarCollapsed, onMenuClick }: HeaderProps) {
     const { theme, toggleTheme } = useTheme();
+    const { admin } = useAdmin();
     const [showNotifications, setShowNotifications] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 
@@ -122,9 +124,13 @@ export function Header({ sidebarCollapsed, onMenuClick }: HeaderProps) {
                         aria-label="Profile menu"
                     >
                         <div className={styles.avatar}>
-                            <span>JD</span>
+                            {admin?.avatar ? (
+                                <img src={admin.avatar} alt={admin.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                            ) : (
+                                <span>{admin?.name?.substring(0, 2).toUpperCase() || 'AD'}</span>
+                            )}
                         </div>
-                        <span className={styles.profileName}>John Doe</span>
+                        <span className={styles.profileName}>{admin?.name || 'Admin'}</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M6 9l6 6 6-6" />
                         </svg>

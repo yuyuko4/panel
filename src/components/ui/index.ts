@@ -5,3 +5,6 @@ export { DataTable } from './DataTable';
 export type { Column } from './DataTable';
 export { StatCard } from './StatCard';
 export { Modal, ConfirmModal } from './Modal';
+export { Badge } from './Badge';
+export { Select } from './Select';
+export { AutoForm } from './AutoForm';
