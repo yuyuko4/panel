@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import styles from './DataTable.module.css';
 import { Input } from './Input';
 import { Button } from './Button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './Card';
@@ -98,9 +97,9 @@ export function DataTable<T>({
     };
 
     const tableContent = (
-        <div className={`${styles.wrapper} ${className}`}>
+        <div className={`flex flex-col gap-md ${className}`}>
             {searchable && (
-                <div className={styles.toolbar}>
+                <div className="flex flex-wrap items-center justify-between gap-md max-sm:flex-col max-sm:items-stretch">
                     <Input
                         placeholder={searchPlaceholder}
                         value={searchQuery}
@@ -114,42 +113,59 @@ export function DataTable<T>({
                                 <path d="M21 21l-4.35-4.35" />
                             </svg>
                         }
-                        className={styles.searchInput}
+                        className="min-w-[280px] max-sm:min-w-0 max-sm:w-full"
                     />
-                    <div className={styles.resultCount}>
+                    <div className="text-sm text-text-muted">
                         {sortedData.length} results
                     </div>
                 </div>
             )}
 
-            <div className={styles.tableWrapper}>
-                <table className={styles.table}>
-                    <thead className={styles.thead}>
+            <div className="overflow-x-auto rounded-lg border border-border bg-bg-secondary">
+                <table className="w-full border-collapse">
+                    <thead className="bg-bg-tertiary">
                         <tr>
                             {columns.map((column) => (
                                 <th
                                     key={String(column.key)}
-                                    className={`${styles.th} ${column.sortable !== false ? styles.sortable : ''}`}
+                                    className={[
+                                        'whitespace-nowrap border-b border-border px-md py-md text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-secondary',
+                                        column.sortable !== false
+                                            ? 'cursor-pointer select-none transition-colors duration-150 hover:text-text-primary'
+                                            : '',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ')}
                                     style={{ width: column.width }}
                                     onClick={() => column.sortable !== false && handleSort(String(column.key))}
                                 >
-                                    <span className={styles.thContent}>
+                                    <span className="flex items-center gap-xs">
                                         {column.header}
                                         {column.sortable !== false && sortColumn === String(column.key) && (
-                                            <span className={styles.sortIcon}>
-                                                {sortDirection === 'asc' ? '↑' : '↓'}
+                                            <span className="text-accent-primary">
+                                                {sortDirection === 'asc' ? 'â†‘' : 'â†“'}
                                             </span>
                                         )}
                                     </span>
                                 </th>
                             ))}
-                            {actions && <th className={styles.th} style={{ width: '100px' }}>Actions</th>}
+                            {actions && (
+                                <th
+                                    className="whitespace-nowrap border-b border-border px-md py-md text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-secondary"
+                                    style={{ width: '100px' }}
+                                >
+                                    Actions
+                                </th>
+                            )}
                         </tr>
                     </thead>
-                    <tbody className={styles.tbody}>
+                    <tbody className="divide-y divide-border-light">
                         {paginatedData.length === 0 ? (
                             <tr>
-                                <td colSpan={columns.length + (actions ? 1 : 0)} className={styles.empty}>
+                                <td
+                                    colSpan={columns.length + (actions ? 1 : 0)}
+                                    className="py-2xl text-center text-sm text-text-muted"
+                                >
                                     {emptyMessage}
                                 </td>
                             </tr>
@@ -157,18 +173,26 @@ export function DataTable<T>({
                             paginatedData.map((row, index) => (
                                 <tr
                                     key={index}
-                                    className={`${styles.tr} ${onRowClick ? styles.clickable : ''}`}
+                                    className={[
+                                        'transition-colors duration-150 hover:bg-bg-hover',
+                                        onRowClick ? 'cursor-pointer' : '',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ')}
                                     onClick={() => onRowClick?.(row, index)}
                                 >
                                     {columns.map((column) => (
-                                        <td key={String(column.key)} className={styles.td}>
+                                        <td key={String(column.key)} className="px-md py-md text-sm text-text-primary">
                                             {column.render
                                                 ? column.render(getValue(row, String(column.key)), row, index)
                                                 : String(getValue(row, String(column.key)) ?? '')}
                                         </td>
                                     ))}
                                     {actions && (
-                                        <td className={styles.td} onClick={(e) => e.stopPropagation()}>
+                                        <td
+                                            className="px-md py-md text-sm text-text-primary"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
                                             {actions(row, index)}
                                         </td>
                                     )}
@@ -180,16 +204,16 @@ export function DataTable<T>({
             </div>
 
             {totalPages > 1 && (
-                <div className={styles.pagination}>
+                <div className="flex items-center justify-center gap-sm pt-md">
                     <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                     >
-                        ← Previous
+                        â† Previous
                     </Button>
-                    <div className={styles.pageNumbers}>
+                    <div className="flex items-center gap-xs">
                         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                             let pageNum: number;
                             if (totalPages <= 5) {
@@ -205,7 +229,14 @@ export function DataTable<T>({
                             return (
                                 <button
                                     key={pageNum}
-                                    className={`${styles.pageNumber} ${currentPage === pageNum ? styles.active : ''}`}
+                                    className={[
+                                        'flex h-9 min-w-[36px] items-center justify-center rounded-md border border-border text-sm font-medium text-text-secondary transition-all duration-150 hover:border-accent-primary hover:bg-bg-tertiary hover:text-accent-primary',
+                                        currentPage === pageNum
+                                            ? 'border-transparent bg-accent-gradient text-white'
+                                            : '',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ')}
                                     onClick={() => handlePageChange(pageNum)}
                                 >
                                     {pageNum}
@@ -219,7 +250,7 @@ export function DataTable<T>({
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >
-                        Next →
+                        Next â†’
                     </Button>
                 </div>
             )}

@@ -1,8 +1,6 @@
 'use client';
 
-import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent, StatCard, Button } from '@/components/ui';
-import styles from './page.module.css';
 
 // Mock data for charts
 const revenueData = [
@@ -23,18 +21,26 @@ const recentOrders = [
     { id: '#ORD-005', customer: 'Charlie Davis', product: 'Basic Plan', amount: '$29.00', status: 'completed' },
 ];
 
+const statusClasses: Record<string, string> = {
+    completed: 'bg-success-bg text-success',
+    pending: 'bg-warning-bg text-warning',
+    cancelled: 'bg-danger-bg text-danger',
+};
+
 export default function DashboardPage() {
     const maxRevenue = Math.max(...revenueData.map(d => d.value));
 
     return (
-        <div className={styles.dashboard}>
-            <div className={styles.header}>
+        <div className="flex flex-col gap-xl">
+            <div className="flex flex-wrap items-start justify-between gap-lg">
                 <div>
-                    <h1 className={styles.title}>Dashboard</h1>
-                    <p className={styles.subtitle}>Welcome back! Here&apos;s what&apos;s happening today.</p>
+                    <h1 className="text-3xl font-bold text-text-primary">Dashboard</h1>
+                    <p className="mt-xs text-sm text-text-muted">
+                        Welcome back! Here&apos;s what&apos;s happening today.
+                    </p>
                 </div>
-                <div className={styles.actions}>
-                    <Button variant="secondary">
+                <div className="flex gap-sm max-sm:w-full">
+                    <Button variant="secondary" className="max-sm:flex-1">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
@@ -42,7 +48,7 @@ export default function DashboardPage() {
                         </svg>
                         Export
                     </Button>
-                    <Button>
+                    <Button className="max-sm:flex-1">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
@@ -53,7 +59,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Stats Grid */}
-            <div className={styles.statsGrid}>
+            <div className="grid gap-lg [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
                 <StatCard
                     title="Total Revenue"
                     value="$45,231.89"
@@ -109,23 +115,25 @@ export default function DashboardPage() {
             </div>
 
             {/* Charts Row */}
-            <div className={styles.chartsRow}>
-                <Card className={styles.chartCard}>
+            <div className="grid gap-lg lg:[grid-template-columns:2fr_1fr]">
+                <Card className="min-h-[350px]">
                     <CardHeader>
                         <CardTitle>Revenue Overview</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className={styles.chart}>
-                            <div className={styles.chartBars}>
+                        <div className="flex h-[280px] items-end pt-lg">
+                            <div className="flex h-full w-full items-end justify-around gap-md">
                                 {revenueData.map((item) => (
-                                    <div key={item.month} className={styles.barContainer}>
+                                    <div key={item.month} className="flex h-full flex-1 flex-col items-center">
                                         <div
-                                            className={styles.bar}
+                                            className="group relative w-full max-w-[60px] cursor-pointer rounded-t-md bg-accent-gradient transition-all duration-250 hover:brightness-110 hover:scale-y-[1.02]"
                                             style={{ height: `${(item.value / maxRevenue) * 100}%` }}
                                         >
-                                            <span className={styles.barValue}>${(item.value / 1000).toFixed(0)}k</span>
+                                            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-text-secondary opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+                                                ${(item.value / 1000).toFixed(0)}k
+                                            </span>
                                         </div>
-                                        <span className={styles.barLabel}>{item.month}</span>
+                                        <span className="mt-sm text-xs text-text-muted">{item.month}</span>
                                     </div>
                                 ))}
                             </div>
@@ -133,14 +141,14 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                <Card className={styles.activityCard}>
+                <Card className="min-h-[350px]">
                     <CardHeader>
                         <CardTitle>Recent Activity</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className={styles.activityList}>
-                            <div className={styles.activityItem}>
-                                <div className={`${styles.activityIcon} ${styles.iconBlue}`}>
+                        <div className="flex flex-col gap-md">
+                            <div className="flex items-start gap-md py-sm">
+                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(59,130,246,0.1)] text-[#3b82f6]">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                         <circle cx="8.5" cy="7" r="4" />
@@ -148,45 +156,45 @@ export default function DashboardPage() {
                                         <line x1="23" y1="11" x2="17" y2="11" />
                                     </svg>
                                 </div>
-                                <div className={styles.activityContent}>
-                                    <p className={styles.activityText}>New user registered</p>
-                                    <span className={styles.activityTime}>2 minutes ago</span>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm text-text-primary">New user registered</p>
+                                    <span className="text-xs text-text-muted">2 minutes ago</span>
                                 </div>
                             </div>
-                            <div className={styles.activityItem}>
-                                <div className={`${styles.activityIcon} ${styles.iconGreen}`}>
+                            <div className="flex items-start gap-md py-sm">
+                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(16,185,129,0.1)] text-[#10b981]">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <polyline points="20 6 9 17 4 12" />
                                     </svg>
                                 </div>
-                                <div className={styles.activityContent}>
-                                    <p className={styles.activityText}>Order #ORD-001 completed</p>
-                                    <span className={styles.activityTime}>15 minutes ago</span>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm text-text-primary">Order #ORD-001 completed</p>
+                                    <span className="text-xs text-text-muted">15 minutes ago</span>
                                 </div>
                             </div>
-                            <div className={styles.activityItem}>
-                                <div className={`${styles.activityIcon} ${styles.iconPurple}`}>
+                            <div className="flex items-start gap-md py-sm">
+                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(139,92,246,0.1)] text-[#8b5cf6]">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <line x1="12" y1="1" x2="12" y2="23" />
                                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                                     </svg>
                                 </div>
-                                <div className={styles.activityContent}>
-                                    <p className={styles.activityText}>Payment received: $299.00</p>
-                                    <span className={styles.activityTime}>1 hour ago</span>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm text-text-primary">Payment received: $299.00</p>
+                                    <span className="text-xs text-text-muted">1 hour ago</span>
                                 </div>
                             </div>
-                            <div className={styles.activityItem}>
-                                <div className={`${styles.activityIcon} ${styles.iconOrange}`}>
+                            <div className="flex items-start gap-md py-sm">
+                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[rgba(245,158,11,0.1)] text-[#f59e0b]">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <circle cx="12" cy="12" r="10" />
                                         <line x1="12" y1="8" x2="12" y2="12" />
                                         <line x1="12" y1="16" x2="12.01" y2="16" />
                                     </svg>
                                 </div>
-                                <div className={styles.activityContent}>
-                                    <p className={styles.activityText}>Low stock alert: Product XYZ</p>
-                                    <span className={styles.activityTime}>3 hours ago</span>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm text-text-primary">Low stock alert: Product XYZ</p>
+                                    <span className="text-xs text-text-muted">3 hours ago</span>
                                 </div>
                             </div>
                         </div>
@@ -197,32 +205,32 @@ export default function DashboardPage() {
             {/* Recent Orders Table */}
             <Card>
                 <CardHeader>
-                    <div className={styles.tableHeader}>
+                    <div className="flex items-center justify-between">
                         <CardTitle>Recent Orders</CardTitle>
                         <Button variant="ghost" size="sm">View All</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className={styles.tableWrapper}>
-                        <table className={styles.table}>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Product</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
+                                    <th className="border-b border-border px-md py-sm text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-muted">Order ID</th>
+                                    <th className="border-b border-border px-md py-sm text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-muted">Customer</th>
+                                    <th className="border-b border-border px-md py-sm text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-muted">Product</th>
+                                    <th className="border-b border-border px-md py-sm text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-muted">Amount</th>
+                                    <th className="border-b border-border px-md py-sm text-left text-xs font-semibold uppercase tracking-[0.05em] text-text-muted">Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-border-light">
                                 {recentOrders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td className={styles.orderId}>{order.id}</td>
-                                        <td>{order.customer}</td>
-                                        <td>{order.product}</td>
-                                        <td className={styles.amount}>{order.amount}</td>
-                                        <td>
-                                            <span className={`${styles.status} ${styles[order.status]}`}>
+                                    <tr key={order.id} className="transition-colors duration-150 hover:bg-bg-hover">
+                                        <td className="px-md py-md text-sm font-semibold text-accent-primary">{order.id}</td>
+                                        <td className="px-md py-md text-sm text-text-primary">{order.customer}</td>
+                                        <td className="px-md py-md text-sm text-text-primary">{order.product}</td>
+                                        <td className="px-md py-md text-sm font-semibold text-text-primary">{order.amount}</td>
+                                        <td className="px-md py-md text-sm text-text-primary">
+                                            <span className={`inline-flex rounded-full px-[10px] py-1 text-xs font-medium capitalize ${statusClasses[order.status]}`}>
                                                 {order.status}
                                             </span>
                                         </td>

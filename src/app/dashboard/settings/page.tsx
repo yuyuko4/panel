@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Input } from '@/components/ui';
 import { useTheme } from '@/hooks/useTheme';
-import styles from './page.module.css';
 
 export default function SettingsPage() {
     const { theme, setTheme } = useTheme();
@@ -25,14 +24,17 @@ export default function SettingsPage() {
         setSaving(false);
     };
 
+    const themeOptionBase =
+        'flex flex-col gap-sm rounded-xl border-2 border-border bg-bg-tertiary p-md transition-all duration-150 hover:border-text-muted';
+
     return (
-        <div className={styles.page}>
-            <div className={styles.header}>
-                <h1 className={styles.title}>Settings</h1>
-                <p className={styles.subtitle}>Manage your account settings and preferences</p>
+        <div className="flex flex-col gap-xl">
+            <div className="mb-md">
+                <h1 className="text-3xl font-bold text-text-primary">Settings</h1>
+                <p className="mt-xs text-sm text-text-muted">Manage your account settings and preferences</p>
             </div>
 
-            <div className={styles.grid}>
+            <div className="grid gap-lg [grid-template-columns:repeat(auto-fit,minmax(400px,1fr))] max-md:grid-cols-1">
                 {/* Profile Settings */}
                 <Card>
                     <CardHeader>
@@ -40,7 +42,7 @@ export default function SettingsPage() {
                         <CardDescription>Update your personal information</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form className={styles.form}>
+                        <form className="flex flex-col gap-md">
                             <Input
                                 label="Full Name"
                                 value={profile.name}
@@ -74,20 +76,20 @@ export default function SettingsPage() {
                         <CardDescription>Customize the look and feel</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className={styles.themeSelector}>
+                        <div className="grid grid-cols-2 gap-md">
                             <button
-                                className={`${styles.themeOption} ${theme === 'light' ? styles.active : ''}`}
+                                className={`${themeOptionBase} ${theme === 'light' ? 'border-accent-primary bg-[rgba(99,102,241,0.05)]' : ''}`}
                                 onClick={() => setTheme('light')}
                             >
-                                <div className={styles.themePreview}>
-                                    <div className={styles.themePreviewLight}>
-                                        <div className={styles.previewSidebar}></div>
-                                        <div className={styles.previewContent}>
-                                            <div className={styles.previewCard}></div>
+                                <div className="overflow-hidden rounded-lg">
+                                    <div className="flex h-20 bg-[#f8fafc]">
+                                        <div className="w-[30%] bg-black/10"></div>
+                                        <div className="flex flex-1 items-start justify-center p-sm">
+                                            <div className="h-10 w-[70%] rounded-sm bg-black/10"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <span className={styles.themeLabel}>
+                                <span className="flex items-center justify-center gap-xs text-sm font-medium text-text-primary">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <circle cx="12" cy="12" r="5" />
                                         <line x1="12" y1="1" x2="12" y2="3" />
@@ -103,18 +105,18 @@ export default function SettingsPage() {
                                 </span>
                             </button>
                             <button
-                                className={`${styles.themeOption} ${theme === 'dark' ? styles.active : ''}`}
+                                className={`${themeOptionBase} ${theme === 'dark' ? 'border-accent-primary bg-[rgba(99,102,241,0.05)]' : ''}`}
                                 onClick={() => setTheme('dark')}
                             >
-                                <div className={styles.themePreview}>
-                                    <div className={styles.themePreviewDark}>
-                                        <div className={styles.previewSidebar}></div>
-                                        <div className={styles.previewContent}>
-                                            <div className={styles.previewCard}></div>
+                                <div className="overflow-hidden rounded-lg">
+                                    <div className="flex h-20 bg-[#0f172a]">
+                                        <div className="w-[30%] bg-white/5"></div>
+                                        <div className="flex flex-1 items-start justify-center p-sm">
+                                            <div className="h-10 w-[70%] rounded-sm bg-white/10"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <span className={styles.themeLabel}>
+                                <span className="flex items-center justify-center gap-xs text-sm font-medium text-text-primary">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                                     </svg>
@@ -132,44 +134,44 @@ export default function SettingsPage() {
                         <CardDescription>Configure how you receive notifications</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className={styles.toggleList}>
-                            <div className={styles.toggleItem}>
-                                <div className={styles.toggleInfo}>
-                                    <span className={styles.toggleTitle}>Email Notifications</span>
-                                    <span className={styles.toggleDescription}>Receive email updates about your account</span>
+                        <div className="flex flex-col gap-sm">
+                            <div className="flex items-center justify-between gap-md rounded-lg bg-bg-tertiary p-md">
+                                <div className="flex flex-col gap-xs">
+                                    <span className="text-sm font-medium text-text-primary">Email Notifications</span>
+                                    <span className="text-xs text-text-muted">Receive email updates about your account</span>
                                 </div>
                                 <button
-                                    className={`${styles.toggle} ${notifications.email ? styles.toggleOn : ''}`}
+                                    className={`relative h-[26px] w-12 flex-shrink-0 rounded-full bg-bg-hover transition-colors duration-150 ${notifications.email ? 'bg-accent-gradient' : ''}`}
                                     onClick={() => setNotifications({ ...notifications, email: !notifications.email })}
                                     aria-label="Toggle email notifications"
                                 >
-                                    <span className={styles.toggleThumb}></span>
+                                    <span className={`absolute left-[3px] top-[3px] h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-150 ${notifications.email ? 'translate-x-[22px]' : ''}`}></span>
                                 </button>
                             </div>
-                            <div className={styles.toggleItem}>
-                                <div className={styles.toggleInfo}>
-                                    <span className={styles.toggleTitle}>Push Notifications</span>
-                                    <span className={styles.toggleDescription}>Receive push notifications in your browser</span>
+                            <div className="flex items-center justify-between gap-md rounded-lg bg-bg-tertiary p-md">
+                                <div className="flex flex-col gap-xs">
+                                    <span className="text-sm font-medium text-text-primary">Push Notifications</span>
+                                    <span className="text-xs text-text-muted">Receive push notifications in your browser</span>
                                 </div>
                                 <button
-                                    className={`${styles.toggle} ${notifications.push ? styles.toggleOn : ''}`}
+                                    className={`relative h-[26px] w-12 flex-shrink-0 rounded-full bg-bg-hover transition-colors duration-150 ${notifications.push ? 'bg-accent-gradient' : ''}`}
                                     onClick={() => setNotifications({ ...notifications, push: !notifications.push })}
                                     aria-label="Toggle push notifications"
                                 >
-                                    <span className={styles.toggleThumb}></span>
+                                    <span className={`absolute left-[3px] top-[3px] h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-150 ${notifications.push ? 'translate-x-[22px]' : ''}`}></span>
                                 </button>
                             </div>
-                            <div className={styles.toggleItem}>
-                                <div className={styles.toggleInfo}>
-                                    <span className={styles.toggleTitle}>Weekly Digest</span>
-                                    <span className={styles.toggleDescription}>Get a weekly summary of activity</span>
+                            <div className="flex items-center justify-between gap-md rounded-lg bg-bg-tertiary p-md">
+                                <div className="flex flex-col gap-xs">
+                                    <span className="text-sm font-medium text-text-primary">Weekly Digest</span>
+                                    <span className="text-xs text-text-muted">Get a weekly summary of activity</span>
                                 </div>
                                 <button
-                                    className={`${styles.toggle} ${notifications.weekly ? styles.toggleOn : ''}`}
+                                    className={`relative h-[26px] w-12 flex-shrink-0 rounded-full bg-bg-hover transition-colors duration-150 ${notifications.weekly ? 'bg-accent-gradient' : ''}`}
                                     onClick={() => setNotifications({ ...notifications, weekly: !notifications.weekly })}
                                     aria-label="Toggle weekly digest"
                                 >
-                                    <span className={styles.toggleThumb}></span>
+                                    <span className={`absolute left-[3px] top-[3px] h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-150 ${notifications.weekly ? 'translate-x-[22px]' : ''}`}></span>
                                 </button>
                             </div>
                         </div>
@@ -177,17 +179,17 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* Danger Zone */}
-                <Card className={styles.dangerCard}>
+                <Card className="border-danger">
                     <CardHeader>
                         <CardTitle>Danger Zone</CardTitle>
                         <CardDescription>Irreversible and destructive actions</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className={styles.dangerZone}>
-                            <div className={styles.dangerItem}>
+                        <div className="flex flex-col gap-md">
+                            <div className="flex items-center justify-between gap-md max-md:flex-col max-md:items-start">
                                 <div>
-                                    <span className={styles.dangerTitle}>Delete Account</span>
-                                    <span className={styles.dangerDescription}>
+                                    <span className="block text-sm font-medium text-text-primary">Delete Account</span>
+                                    <span className="mt-xs block text-xs text-text-muted">
                                         Once you delete your account, there is no going back. Please be certain.
                                     </span>
                                 </div>

@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
 import { DataTable, Button, AutoForm } from '@/components/ui';
 import { TableBuilder } from '@/utils/table-utils';
 import { FormBuilder } from '@/utils/form-builder';
 import { useFormModal } from '@/hooks/useFormModal';
 import { useCrud } from '@/hooks/useCrud';
 import { useSubmit } from '@/hooks/useSubmit';
-import styles from './page.module.css';
 
 interface User {
     id: number;
@@ -40,11 +38,13 @@ export default function UsersPage() {
 
     const columns = new TableBuilder<User>()
         .custom('name', 'User', (user) => (
-            <div className={styles.userCell}>
-                <div className={styles.avatar}>{user.avatar}</div>
+            <div className="flex items-center gap-md">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-accent-gradient text-xs font-semibold text-white">
+                    {user.avatar}
+                </div>
                 <div>
-                    <div className={styles.userName}>{user.name}</div>
-                    <div className={styles.userEmail}>{user.email}</div>
+                    <div className="font-medium text-text-primary">{user.name}</div>
+                    <div className="text-xs text-text-muted">{user.email}</div>
                 </div>
             </div>
         ))
@@ -98,11 +98,11 @@ export default function UsersPage() {
     );
 
     return (
-        <div className={styles.page}>
-            <div className={styles.header}>
+        <div className="flex flex-col gap-xl">
+            <div className="flex flex-wrap items-start justify-between gap-lg">
                 <div>
-                    <h1 className={styles.title}>Users</h1>
-                    <p className={styles.subtitle}>Manage your team members and their permissions</p>
+                    <h1 className="text-3xl font-bold text-text-primary">Users</h1>
+                    <p className="mt-xs text-sm text-text-muted">Manage your team members and their permissions</p>
                 </div>
                 <Button onClick={handleAddUser}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -120,9 +120,9 @@ export default function UsersPage() {
                 searchPlaceholder="Search users..."
                 pageSize={8}
                 actions={(row) => (
-                    <div className={styles.actions}>
+                    <div className="flex gap-xs">
                         <button
-                            className={styles.actionButton}
+                            className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-transparent text-text-muted transition-all duration-150 hover:border-bg-hover hover:bg-bg-tertiary hover:text-text-primary"
                             onClick={() => handleEditUser(row)}
                             aria-label="Edit user"
                         >
@@ -132,7 +132,7 @@ export default function UsersPage() {
                             </svg>
                         </button>
                         <button
-                            className={`${styles.actionButton} ${styles.danger}`}
+                            className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-transparent text-text-muted transition-all duration-150 hover:border-danger hover:bg-danger-bg hover:text-danger"
                             onClick={() => handleDeleteUser(row.id)}
                             aria-label="Delete user"
                         >

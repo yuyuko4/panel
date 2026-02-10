@@ -60,7 +60,7 @@ const adminRoutes = [
         ),
     },
     {
-        href: '/settings',
+        href: '/dashboard/settings',
         label: 'Settings',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
